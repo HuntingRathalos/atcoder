@@ -57,7 +57,7 @@ Class Maze {
         $next_y = $y + $this->dy[$j];
         $next_x = $x + $this->dx[$j];
 
-        if($next_y < 0 || $next_y >= $this->line || $next_y < 0 || $next_y >= $this->row){
+        if($next_y < 0 || $next_y >= $this->line || $next_x < 0 || $next_x >= $this->row){
           continue;
         }
         if($this->mazeArray[$next_y][$next_x] == '#'){
