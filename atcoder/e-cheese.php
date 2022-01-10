@@ -20,14 +20,15 @@ for($i = 0; $i < $height; $i++){
     }
   }
 }
+
 $time = 0;
 $mazeObj = new Maze($height, $width, $mazeArray);
 for($n = 0; $n <=$factory - 1; $n++){
   $mazeObj->resetDist();
+  $sY = $coordinateArray['S'][0];
+  $sX = $coordinateArray['S'][1];
 
   if($n == 0){
-    $sY = $coordinateArray['S'][0];
-    $sX = $coordinateArray['S'][1];
     $mazeObj->bfs($sY, $sX);
     $time += $mazeObj->getDist($coordinateArray[1][0], $coordinateArray[1][1]);
     continue;
@@ -37,9 +38,12 @@ for($n = 0; $n <=$factory - 1; $n++){
   $gy = $coordinateArray[$n + 1][0];
   $gx = $coordinateArray[$n + 1][1];
   $mazeObj->bfs($sy, $sx);
-  $time += $mazeObj->getDist($gy, $gx);
+  $firstTime = $mazeObj->getDist($gy, $gx);
+  $mazeObj->bfs($sY, $sX);
+  $secondTime = $mazeObj->getDist($gy, $gx);
+  $time += min($firstTime, $secondTime);
 }
-echo $time;
+echo $time.PHP_EOL;
 Class Maze {
   private $height;
   private $width;
@@ -63,7 +67,9 @@ Class Maze {
   }
   public function resetDist(){
     for($z = 0; $z < $this->height; $z++){
-     $this->dist[] = array_fill(0, $this->width, -1);
+      for($m = 0; $m < $this->width; $m++){
+        $this->dist[$z][$m] = -1;
+      }
     }
   }
   public function bfs($l, $r){
